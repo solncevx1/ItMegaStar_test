@@ -18,11 +18,13 @@ class PostsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        network.fetchPosts() {posts in
-            DispatchQueue.main.async {
-                self.spinner.startAnimating()
-                self.postsArray = posts
-                self.tableView.reloadData()
+        DispatchQueue.global().async { [weak self] in
+            self?.network.fetchPosts() {posts in
+                DispatchQueue.main.async {
+                    self?.spinner.startAnimating()
+                    self?.postsArray = posts
+                    self?.tableView.reloadData()
+                }
             }
         }
     }
